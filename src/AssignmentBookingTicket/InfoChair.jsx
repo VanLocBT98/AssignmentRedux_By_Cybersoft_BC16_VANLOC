@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {ActionDaDat, ActionHuyGhe} from '../redux/action/ActionBooking'
+import Swal from 'sweetalert2'
 
  class InfoChair extends Component {
     render() {
         return (
+            
             <div className='mt-2'>
                 <div>
                     <button className="gheDuocChon"></button><span className="text-light" style={{ fontSize: '30px' }}>Ghế Đã Chọn</span> <br />
@@ -22,7 +24,11 @@ import {ActionDaDat, ActionHuyGhe} from '../redux/action/ActionBooking'
                         </thead>
                         <tbody>
                            {this.props.DanhSachGheDangDat.map((ChairBooking, index)=>{
+                                if(ChairBooking.daDat){
+                                       return ''
+                                }
                                return (
+                                  
                                    <tr key={index} className="text-light">
                                        <td>{ChairBooking.soGhe}</td>
                                        <td>{ChairBooking.gia.toLocaleString()}</td>
@@ -39,8 +45,13 @@ import {ActionDaDat, ActionHuyGhe} from '../redux/action/ActionBooking'
                                     Total
                                 </td>
                                 <td colSpan="2">
+                                  
                                     {this.props.DanhSachGheDangDat.reduce((total,chair,index)=>{
-                                        return total+=chair.gia
+
+                                        if(chair.daDat){
+                                            return total
+                                        }
+                                        return total +=  chair.gia
                                     },0).toLocaleString()}
                                 </td>
                             </tr>
@@ -48,7 +59,24 @@ import {ActionDaDat, ActionHuyGhe} from '../redux/action/ActionBooking'
                     </table>     
                 </div>
                 {this.props.DanhSachGheDangDat.length >=1 ? <button onClick={()=>{
-                    this.props.dispatch(ActionDaDat())
+                    this.props.dispatch(ActionDaDat(), 
+                    Swal.fire({
+                        title: 'Cho xin tiền vé bạn ê',
+                        imageUrl: './img/meomeomeo.webp',
+                        imageHeight: 300,
+                        imageAlt: 'A tall image',
+                        width: 600,
+                        padding: '3em',
+                        color: '#716add',
+                        background: '#fff url(/images/trees.png)',
+                        backdrop: `
+                          rgba(255,20,147,0.2)
+                          url("./img/nyan-cat.gif")
+                          left top
+                          no-repeat
+                        `
+                      })
+                      )
                 }}
                  className="btn btn-warning">Đặt Vé</button> :''}
             </div>

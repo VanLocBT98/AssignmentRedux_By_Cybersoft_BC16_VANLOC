@@ -5,17 +5,25 @@ import {ActionBooking,ActionHuyGhe} from '../redux/action/ActionBooking'
 
  class RowChair extends Component {
     renderChair =()=>{
-        return this.props.rowChair.danhSachGhe.map((chair,index)=>{
+        return this.props.rowChair.danhSachGhe.map((chair,index)=>{ //! rowchair lấy từ state bên BookingTicket.jsx
             let cssChair='';
             let disabled= false;
-            // trạng thái đã được đặt
+            //! trạng thái đã được đặt
             if(chair.daDat){
                 cssChair ='gheDuocChon'
                 disabled= true;
             }
-            // trạng thái đang đặt
+            //! trạng thái đang đặt
             let cssGheDangDat =''
-            let indexGhe = this.props.DanhSachGheDangDat.findIndex(chairIndex=> chairIndex.soGhe === chair.soGhe)
+            let indexGhe = this.props.DanhSachGheDangDat.findIndex(chairIndex=> {
+                // ! duyệt qua mảng xem đã được đặt chưa nếu được đặt rồi thì trả về -1 nếu chưa tiếp tục trạng thái đang đặt
+                if( chairIndex.daDat && chairIndex.soGhe === chair.soGhe){
+                    cssChair ='gheDuocChon'
+                disabled= true;
+                return -1;
+                }
+                return chairIndex.soGhe === chair.soGhe
+               })
             if(indexGhe !== -1){
                 cssGheDangDat ='gheDangChon'
             }
@@ -30,7 +38,7 @@ import {ActionBooking,ActionHuyGhe} from '../redux/action/ActionBooking'
             )
         })
     }
-    renderFisrtRow =()=>{
+    renderFisrtRow =()=>{ //* render hàng  thứ nhất ra giao diện
         return this.props.rowChair.danhSachGhe.map((row,index)=>{
             return(
                 <button className='rowNumber' key={index}>
@@ -38,7 +46,7 @@ import {ActionBooking,ActionHuyGhe} from '../redux/action/ActionBooking'
                 </button>)
         })
     }
-    renderRow =()=>{
+    renderRow =()=>{ //* render các hàng ra giao diện
         if(this.props.NumberRow===0){
             return (
                 <div className="ml-3"> 
