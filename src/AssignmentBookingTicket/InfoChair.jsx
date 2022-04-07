@@ -60,8 +60,15 @@ import Swal from 'sweetalert2'
                 </div>
                 {this.props.DanhSachGheDangDat.length >=1 ? <button onClick={()=>{
                     this.props.dispatch(ActionDaDat(), 
+                  
                     Swal.fire({
-                        title: 'Cho xin tiền vé bạn ê',
+                        title: `Cho xin tiền vé bạn ê  ${  (this.props.DanhSachGheDangDat.reduce((total,chair,index)=>{
+                            if(chair.daDat){
+                                return total
+                            }
+                            
+                            return total += chair.gia
+                        },0))}VND` ,
                         imageUrl: './img/meomeomeo.webp',
                         imageHeight: 300,
                         imageAlt: 'A tall image',
